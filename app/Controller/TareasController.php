@@ -62,7 +62,7 @@ class TareasController extends AppController {
     }
 
     /**
-     * planificar method
+     * buscar method
      *
      * @return void
      */
@@ -70,12 +70,17 @@ class TareasController extends AppController {
         $search = null;
         if (!empty($this->request->query['search'])) {
             $search = $this->request->query['search'];
-            $fecha=$search['year'].'-'.$search['month'].'-'.$search['day'];
+            $fecha = $search['year'] . '-' . $search['month'] . '-' . $search['day'];
             $conditions[] = array('Tarea.fecha LIKE' => $fecha, 'Tarea.estado LIKE' => 'pendiente');
 
             $tareas = $this->Tarea->find('all', array('recursive' => -1, 'conditions' => $conditions, 'limit' => 200));
 
             $this->set(compact('tareas'));
+
+            $conditions2[] = array('Jornada.fecha LIKE' => $fecha);
+            $this->loadModel("Jornada");
+            $jornadas = $this->Jornada->find('all', array('recursive' => -1, 'conditions' => $conditions2, 'limit' => 200));
+            $this->set(compact('jornadas'));
         }
         $this->set(compact('search'));
 

@@ -61,6 +61,35 @@ class JornadasController extends AppController {
         $this->set('jornadas', $this->paginate());
     }
 
+    
+    
+    /**
+     * buscar method
+     *
+     * @return void
+     */
+    public function buscar() {
+        $search = null;
+        if (!empty($this->request->query['search'])) {
+            $search = $this->request->query['search'];
+            $fecha=$search['year'].'-'.$search['month'].'-'.$search['day'];
+            $conditions[] = array('Jornada.fecha LIKE' => $fecha );
+
+            $jornadas = $this->Tarea->find('all', array('recursive' => -1, 'conditions' => $conditions, 'limit' => 200));
+
+            $this->set(compact('jornadas'));
+        }
+        $this->set(compact('search'));
+
+        if ($this->request->is('ajax')) {
+            $this->layout = false;
+            $this->set('ajax', 1);
+        } else {
+            $this->set('ajax', 0);
+        }
+        $this->redirect('/tareas/buscar');
+    }
+    
     /**
      * view method
      *
