@@ -45,7 +45,7 @@ $this->Paginator->options(array(
                         <td><?php echo h($tarea['Tarea']['fecha']); ?>&nbsp;</td>
                         <td><?php echo h($tarea['Tarea']['direccion']); ?>&nbsp;</td>
                         <td>
-                            <?php echo $this->Html->link($tarea['Jornada']['horaInicio'], array('controller' => 'jornadas', 'action' => 'view', $tarea['Jornada']['id'])); ?>
+                            <?php echo $this->Html->link($tarea['Jornada']['user_id'], array('controller' => 'jornadas', 'action' => 'view', $tarea['Jornada']['id'])); ?>
                         </td>
                         <td class="actions">
                             <?php echo $this->Html->link(__('Ver'), array('action' => 'view', $tarea['Tarea']['id']), array('class' => 'btn btn-xs btn-info')); ?>

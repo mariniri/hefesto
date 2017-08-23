@@ -50,14 +50,18 @@
         </dd>
         <dt><?php echo __('Jornada'); ?></dt>
         <dd>
-            <?php echo $this->Html->link($tarea['Jornada']['horaInicio'], array('controller' => 'jornadas', 'action' => 'view', $tarea['Jornada']['id'])); ?>
+            <?php echo $this->Html->link($tarea['Jornada']['user_id'], array('controller' => 'jornadas', 'action' => 'view', $tarea['Jornada']['id'])); ?>
             &nbsp;
         </dd>
     </dl>
 </div>
+<?php if ($tarea['Tarea']['estado'] == 'asignada' && $current_user['role'] == 'operario') { ?>
+    <?php echo $this->Html->link(__('No puedo asistir'), array('action' => 'declinar', $tarea['Tarea']['id']), array('class' => 'btn btn-s btn-warning')); ?><br>
+    <br><?php echo $this->Html->link(__('Finalizada'), array('action' => 'finalizar', $tarea['Tarea']['id']), array('class' => 'btn btn-s btn-success')); ?>
+<?php } ?>
 <?php if ($current_user['role'] != 'operario') { ?>
     <?php echo $this->Html->link(__('Editar tarea'), array('action' => 'edit', $tarea['Tarea']['id']), array('class' => 'btn btn-xs btn-info')); ?><br>
     <?php echo $this->Form->postLink(__('Eliminar tarea'), array('action' => 'delete', $tarea['Tarea']['id']), array('confirm' => __('Seguro que quieres eliminar a # %s?', $tarea['Tarea']['id']), 'class' => 'btn btn-xs btn-info')); ?>
 
-
-<?php } ?>
+<?php
+} 

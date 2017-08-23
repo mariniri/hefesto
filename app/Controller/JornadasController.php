@@ -36,7 +36,7 @@ class JornadasController extends AppController {
             }
         }
         if ($user['role'] == 'operario') {
-            if (in_array($this->action, array('misJornadas'))) {
+            if (in_array($this->action, array('misJornadas','view'))) {
                 return true;
             } else {
                 if ($this->Auth->user('id')) {

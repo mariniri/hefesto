@@ -17,6 +17,7 @@ class Jornada extends AppModel {
  */
 	public $displayField = 'horaInicio';
 
+        
 /**
  * Validation rules
  *

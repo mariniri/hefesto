@@ -5,13 +5,25 @@
     <div class="row">
         <?php echo $this->Form->create('Tarea', array('type' => 'GET')); ?>
 
-        <div class="col-sm-4">
-            <?php echo $this->Form->input('search', array('label' => false, 'type' => 'date', 'div' => false, 'class' => 'form-control', 'autocomplet' => 'off', 'value' => $search)); ?>
+        <div class="col-sm-6">
+            <?php echo $this->Form->input('search', array('label' => 'Fecha planificación', 'type' => 'date', 'div' => false, 'class' => 'form-control', 'autocomplet' => 'off', 'value' => $search)); ?>
         </div>
-        <div class="col-sm-3">
+    </div>
+    <div class="row">
+        <?php if (!empty($central)) { ?>
+            <div class="col-sm-6">
+                <?php echo $this->Form->input('central', array('class' => 'form-control', 'label' => 'Central', 'type' => 'select', 'options' => $centrals, 'default' => $central)); ?>
+            </div>
+        <?php } else { ?>
+            <div class="col-sm-6">
+                <?php echo $this->Form->input('central', array('class' => 'form-control', 'label' => 'Central', 'type' => 'select', 'options' => $centrals)); ?>
+            </div>
+        <?php } ?>
+    </div><br>
+    <div class="row">
+        <div class="col-sm-6">
             <?php echo $this->Form->button('Buscar', array('div' => false, 'class' => 'btn btn-primary')); ?>
         </div>
-
         <?php echo $this->Form->end(); ?>
 
     </div>
@@ -19,9 +31,9 @@
 <?php endif; ?>
 
 <?php if (!empty($search)): ?>
-
     <?php if (!empty($tareas)): ?>
-
+    
+        <h3>Tareas disponibles</h3>
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -32,8 +44,6 @@
                     <th><?php echo $this->Paginator->sort('latitud'); ?></th>
                     <th><?php echo $this->Paginator->sort('fecha'); ?></th>
                     <th><?php echo $this->Paginator->sort('direccion'); ?></th>
-
-                    <th class="actions"><?php echo __('Actions'); ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -47,13 +57,7 @@
                         <td><?php echo h($tarea['Tarea']['fecha']); ?>&nbsp;</td>
                         <td><?php echo h($tarea['Tarea']['direccion']); ?>&nbsp;</td>
 
-                        <td class="actions">
-                            <?php echo $this->Html->link(__('Ver'), array('action' => 'view', $tarea['Tarea']['id']), array('class' => 'btn btn-xs btn-info')); ?>
-                            <?php if ($current_user['role'] != 'operario') { ?>
-                                <?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $tarea['Tarea']['id']), array('class' => 'btn btn-xs btn-info')); ?>
-                                <?php echo $this->Form->postLink(__('Eliminar'), array('action' => 'delete', $tarea['Tarea']['id']), array('confirm' => __('Seguro que quieres eliminar a # %s?', $tarea['Tarea']['id']), 'class' => 'btn btn-xs btn-info')); ?>
-                            <?php } ?>
-                        </td>
+
                     </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -61,13 +65,13 @@
 
     <?php else: ?>
 
-        <h3>No se encontraron tareas</h3>
+        <h5>No se encontraron tareas</h5>
 
     <?php endif; ?>
 
 
     <?php if (!empty($jornadas)): ?>
-
+        <h3>Jornadas disponibles</h3>
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -75,9 +79,7 @@
                     <th><?php echo $this->Paginator->sort('horaInicio'); ?></th>
                     <th><?php echo $this->Paginator->sort('horafin'); ?></th>
                     <th><?php echo $this->Paginator->sort('fecha'); ?></th>
-                    <th><?php echo $this->Paginator->sort('user_id'); ?></th>
-                    <th><?php echo $this->Paginator->sort('central_id'); ?></th>
-                    <th class="actions"><?php echo __('Actions'); ?></th>
+
                 </tr>
             </thead>
             <tbody>
@@ -87,24 +89,22 @@
                         <td><?php echo h($jornada['Jornada']['horaInicio']); ?>&nbsp;</td>
                         <td><?php echo h($jornada['Jornada']['horafin']); ?>&nbsp;</td>
                         <td><?php echo h($jornada['Jornada']['fecha']); ?>&nbsp;</td>
-                        <td>
-                            <?php echo $this->Html->link($jornada['User']['apellidos'], array('controller' => 'users', 'action' => 'view', $jornada['User']['id'])); ?>
-                        </td>
-                        <td>
-                            <?php echo $this->Html->link($jornada['Central']['dirección'], array('controller' => 'centrals', 'action' => 'view', $jornada['Central']['id'])); ?>
-                        </td>
-                        <td class="actions">
-                            <?php echo $this->Html->link(__('Ver'), array('action' => 'view', $jornada['Jornada']['id']), array('class' => 'btn btn-xs btn-info')); ?>
-                            <?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $jornada['Jornada']['id']), array('class' => 'btn btn-xs btn-info')); ?>
-                            <?php echo $this->Form->postLink(__('Eliminar'), array('action' => 'delete', $jornada['Jornada']['id']), array('confirm' => __('Seguro quieres eliminar a # %s?', $jornada['Jornada']['id']), 'class' => 'btn btn-xs btn-info')); ?>
-                        </td>
+
                     <?php endforeach; ?>
             </tbody>
         </table>
-
     <?php else: ?>
-
-        <h3>No se encontraron jornadas</h3>
-
+        <h5>No se encontraron jornadas</h5>
     <?php endif; ?>
-<?php endif; ?>
+    <?php
+endif;
+if (!empty($jornadas) && !empty($tareas) && !empty($central)) {
+    echo $this->Html->link(__('Iniciar planificador'), array('action' => 'planificar'), array('class' => 'btn btn-success'));
+} else {
+    ?>
+    <div class="alert alert-warning" role="alert">
+        Para iniciar el planificador es necesario disponer de tareas y jornadas para la fecha seleccionada.
+    </div>
+    <?php
+}
+?>

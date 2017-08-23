@@ -71,7 +71,7 @@
                             <li class="divider"></li>
                             <li class="dropdown-header">Gestionar tareas</li>
                             <li><?php echo $this->Html->link('Tareas pendientes', array('controller' => 'tareas', 'action' => 'tareasPendientes')); ?></li>
-                            <li><?php echo $this->Html->link('Tareas planificadas', array('controller' => 'tareas', 'action' => 'tareasPlanificadas')); ?></li>
+                            <li><?php echo $this->Html->link('Tareas asignadas', array('controller' => 'tareas', 'action' => 'tareasAsignadas')); ?></li>
                             <li><?php echo $this->Html->link('Tareas atendidas', array('controller' => 'tareas', 'action' => 'tareasAtendidas')); ?></li>  
                         </ul>
                     </li>

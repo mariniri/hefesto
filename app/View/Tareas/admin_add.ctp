@@ -7,7 +7,7 @@
             </div>
             <fieldset>
                 <?php
-                echo $this->Form->input('estado', array('class' => 'form-control', 'label' => 'Estado'));
+                //echo $this->Form->input('estado', array('class' => 'form-control', 'label' => 'Estado'));
                 //echo $this->Form->input('inicio', array('class' => 'form-control', 'label' => 'Inicio'));
                 //echo $this->Form->input('fin', array('class' => 'form-control', 'label' => 'Fin'));
                 //echo $this->Form->input('horaInicio', array('class' => 'form-control', 'label' => 'Hora inicio'));
@@ -18,7 +18,7 @@
                 //echo $this->Form->input('distanciaCentral', array('class' => 'form-control', 'label' => 'Distancia a la central'));
                 echo $this->Form->input('fecha', array('class' => 'form-control', 'label' => 'Fecha'));
                 echo $this->Form->input('direccion', array('class' => 'form-control', 'label' => 'Dirección'));
-                echo $this->Form->input('jornada_id', array('class' => 'form-control', 'label' => 'Jornada'));
+                //echo $this->Form->input('jornada_id', array('class' => 'form-control', 'label' => 'Jornada'));
                 ?>
             </fieldset>
             <?php echo $this->Form->end(array('label' => 'Crear tarea', 'class' => 'btn btn-s btn-info')); ?>

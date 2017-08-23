@@ -35,6 +35,7 @@
         </dd>
     </dl>
 </div>
+<?php if ($current_user['role'] != 'operario') { ?>
     <?php echo $this->Html->link(__('Editar jornada'), array('action' => 'edit', $jornada['Jornada']['id']), array('class' => 'btn btn-xs btn-info')); ?> <br>
     <?php echo $this->Form->postLink(__('Eliminar jornada'), array('action' => 'delete', $jornada['Jornada']['id']), array('confirm' => __('Seguro quieres eliminar a # %s?', $jornada['Jornada']['id']), 'class' => 'btn btn-xs btn-info')); ?> <br>
 
@@ -114,3 +115,4 @@
 <div class="actions">
     <?php echo $this->Html->link(__('Nueva tarea'), array('controller' => 'tareas', 'action' => 'add'), array('class' => 'btn btn-xs btn-info')); ?></ul>
 </div>
+<?php } ?>

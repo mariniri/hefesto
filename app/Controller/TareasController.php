@@ -1,6 +1,9 @@
 <?php
 
 App::uses('AppController', 'Controller');
+App::uses('CentralAuxiliar', 'Controller/Component');
+App::uses('JornadaAuxiliar', 'Controller/Component');
+App::uses('TareaAuxiliar', 'Controller/Component');
 
 /**
  * Tareas Controller
@@ -15,8 +18,8 @@ class TareasController extends AppController {
      *
      * @var array
      */
-    public $components = array('RequestHandler');
-    public $helpers = array('Html', 'Form', 'Time', 'Js');
+    public $components = array('RequestHandler', 'Session', 'Planificador');
+    public $helpers = array('Html', 'Form', 'Time', 'Js', 'Session');
     public $paginate = array(
         'limit' => 5,
         'order' => array(
@@ -26,7 +29,7 @@ class TareasController extends AppController {
 
     public function isAuthorized($user) {
         if ($user['role'] == 'supervisor') {
-            if (in_array($this->action, array('add', 'index', 'edit', 'view', 'buscar', 'delete', 'tareasPendientes', 'tareasPlanificadas', 'tareasAtendidas'))) {
+            if (in_array($this->action, array('add', 'index', 'planificar', 'edit', 'view', 'buscar', 'delete', 'tareasPendientes', 'tareasAsignadas', 'tareasAtendidas'))) {
                 return true;
             } else {
                 if ($this->Auth->user('id')) {
@@ -36,7 +39,7 @@ class TareasController extends AppController {
             }
         }
         if ($user['role'] == 'operario') {
-            if (in_array($this->action, array('misTareas', 'view'))) {
+            if (in_array($this->action, array('misTareas', 'finalizar', 'view', 'declinar'))) {
                 return true;
             } else {
                 if ($this->Auth->user('id')) {
@@ -57,7 +60,7 @@ class TareasController extends AppController {
         $this->Tarea->recursive = 0;
         $this->paginate['Tarea']['limit'] = 5;
         $this->paginate['Tarea']['order'] = array('Tarea.id' => 'asc');
-        //$this->paginate['User']['conditions']=array('User.rol'=>'asc');
+//$this->paginate['User']['conditions']=array('User.rol'=>'asc');
         $this->set('tareas', $this->paginate());
     }
 
@@ -68,19 +71,35 @@ class TareasController extends AppController {
      */
     public function buscar() {
         $search = null;
+
+        $this->loadModel("Central");
+        $centrales = $this->Central->find('all');
+        $centrals = array();
+        foreach ($centrales as $c) {
+            if ($c['Central']['dirección'] != 'INICIAL') {
+                $key = $c['Central']['id'];
+                $centrals["$key"] = $c['Central']['id'] . "-" . $c['Central']['dirección'];
+            }
+        }
+        $this->set(compact('centrals'));
         if (!empty($this->request->query['search'])) {
             $search = $this->request->query['search'];
             $fecha = $search['year'] . '-' . $search['month'] . '-' . $search['day'];
             $conditions[] = array('Tarea.fecha LIKE' => $fecha, 'Tarea.estado LIKE' => 'pendiente');
-
             $tareas = $this->Tarea->find('all', array('recursive' => -1, 'conditions' => $conditions, 'limit' => 200));
-
             $this->set(compact('tareas'));
-
-            $conditions2[] = array('Jornada.fecha LIKE' => $fecha);
+            $elegida = $this->request->query['central'];
+            $central = explode("-", $centrals["$elegida"])[0];
+            $this->set(compact('central'));
+            $conditions2[] = array('Jornada.fecha LIKE' => $fecha, 'Jornada.central_id LIKE' => $central);
             $this->loadModel("Jornada");
             $jornadas = $this->Jornada->find('all', array('recursive' => -1, 'conditions' => $conditions2, 'limit' => 200));
             $this->set(compact('jornadas'));
+            $this->Session->write('jornadas', $jornadas);
+            $this->Session->write('tareas', $tareas);
+            $options = array('conditions' => array('Central.' . $this->Central->primaryKey => $central));
+            $cen = $this->Central->find('first', $options);
+            $this->Session->write('central', $cen['Central']);
         }
         $this->set(compact('search'));
 
@@ -121,7 +140,7 @@ class TareasController extends AppController {
                     'alias' => 'd',
                     'type' => 'left',
                     'foreignKey' => false,
-                    'conditions' => array('Tarea.jornada_id = d.id')
+                    'conditions' => array('Tarea.jornada_id = d.id',)
                 )
             ),
             'conditions' => array('Jornada.user_id' => $id)
@@ -155,14 +174,14 @@ class TareasController extends AppController {
     }
 
     /**
-     * tareasPlanificadas method
+     * tareasAtendidas method
      *
      * @throws NotFoundException
      * @param string $id
      * @return void
      */
-    public function tareasPlanificadas() {
-        $options = array('conditions' => array('Tarea.estado' => 'planificada'));
+    public function tareasAtendidas() {
+        $options = array('conditions' => array('Tarea.estado' => 'atendida'));
         $this->set('tareas', $this->Tarea->find('all', $options));
     }
 
@@ -172,6 +191,8 @@ class TareasController extends AppController {
      * @return void
      */
     public function add() {
+        $this->request->data['Tarea']['estado'] = 'pendiente';
+        $this->request->data['Tarea']['jornada_id'] = '4';
         if ($this->request->is('post')) {
             $this->Tarea->create();
             if ($this->Tarea->save($this->request->data)) {
@@ -183,6 +204,102 @@ class TareasController extends AppController {
         }
         $jornadas = $this->Tarea->Jornada->find('list');
         $this->set(compact('jornadas'));
+    }
+
+    /**
+     * add method
+     *
+     * @return void
+     */
+    public function planificar() {
+        $tareas = $this->Session->read('tareas');
+        $jornadas = $this->Session->read('jornadas');
+        $central = $this->Session->read('central');
+        $this->loadModel("Jornada");
+        $resultado = $this->Planificador->distribuirTareas($tareas, $jornadas, $central);
+        $jornadas = $resultado[0];
+        //debug($jornadas);
+        foreach ($jornadas as $j) {
+            $idjornada = $j->getId();
+            $minutoslibres = $j->getMinutosLibres();
+            $options2 = array('conditions' => array('Jornada.id' => $idjornada));
+            $datos2 = $this->Jornada->find('first', $options2);
+            $datos2['Jornada']['minutoslibres'] = $minutoslibres;
+            $this->Jornada->save($datos2);
+            $tareas = $j->getTareas();
+            debug($tareas);
+            foreach ($tareas as $t) {
+                $idtarea = $t->getId();
+                $options = array('conditions' => array('Tarea.id' => $idtarea));
+                $datos = $this->Tarea->find('first', $options);
+                $datos['Tarea']['estado'] = 'asignada';
+                $datos['Tarea']['jornada_id'] = "$idjornada";
+                $date = date_create($t->getHoraInicio());
+                $datos['Tarea']['horaInicio'] = $date->format('Y-m-d H:i:s');
+                $date = date_create($t->getHoraFin());
+                $datos['Tarea']['horaFin'] = $date->format('Y-m-d H:i:s');
+                debug($datos['Tarea']);
+                $this->Tarea->save($datos);
+            }
+        }
+    }
+
+    /**
+     * finalizar method
+     *
+     * @return void
+     */
+    public function finalizar($id = null) {
+        $options = array('conditions' => array('Tarea.id' => $id));
+        $tarea = $this->Tarea->find('first', $options);
+        $tarea['Tarea']['estado'] = 'atendida';
+        if ($this->Tarea->save($tarea)) {
+            //$this->Session->setFlash('La tarea se ha marcado como finalizada', 'default', array('class' => 'alert alert-success'));
+            return $this->redirect(array('action' => 'misTareas'));
+        }
+    }
+
+    /**
+     * declinar method
+     *
+     * @return void
+     */
+    public function declinar($id = null) {
+        $options = array('conditions' => array('Tarea.id' => $id));
+        $tarea = $this->Tarea->find('first', $options);
+
+        $idjornada = $tarea['Tarea']['jornada_id'];
+        $lasttarea = $this->Tarea->find('all', array(
+            'limit' => 1,
+            'order' => array(
+                'Tarea.horaFin DESC'
+            )
+        ));
+        $this->loadModel("Jornada");
+        $options2 = array('conditions' => array('Jornada.id' => $idjornada));
+        $jornada = $this->Jornada->find('first', $options2);
+        $lat1 = $tarea['Tarea']['latitud'];
+        $lat2 = $lasttarea[0]['Tarea']['latitud'];
+        $long1 = $tarea['Tarea']['longitud'];
+        $long2 = $lasttarea[0]['Tarea']['longitud'];
+        $dist = $this->Planificador->distanciaEntreDosById($lat1, $lat2, $long1, $long2);
+        $dur = $tarea['Tarea']['total'];
+        $total = $dist + $dur;
+        debug($total);
+        if ($total <= $jornada['Jornada']['minutoslibres']) {
+            $min = $jornada['Jornada']['minutoslibres'] - $total;
+            $this->Jornada->save($jornada);
+            $tarea['Tarea']['estado'] = 'asignada';
+            $horaini = $this->Planificador->sumarHora($lasttarea[0]['Tarea']['horaFin'], $dist);
+            $horafin = $this->Planificador->sumarHora($horaini, $dur);
+            $tarea['Tarea']['horaInicio'] = $horaini;
+            $tarea['Tarea']['horaFin'] = $horafin;
+        } else {
+            $tarea['Tarea']['estado'] = 'declinada';
+            $tarea['Tarea']['jornada_id'] = '4';
+        }
+        $this->Tarea->save($tarea);
+        $this->set(compact('tarea'));
     }
 
     /**
