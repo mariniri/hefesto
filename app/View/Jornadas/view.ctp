@@ -1,3 +1,4 @@
+<div id="contenedor-jornadas">
 <div class="page-header">
     <h2><?php echo __('Ver Jornada'); ?></h2>
 </div>
@@ -116,3 +117,4 @@
     <?php echo $this->Html->link(__('Nueva tarea'), array('controller' => 'tareas', 'action' => 'add'), array('class' => 'btn btn-xs btn-info')); ?></ul>
 </div>
 <?php } ?>
+</div> <!-- contenedor-jornadas -->

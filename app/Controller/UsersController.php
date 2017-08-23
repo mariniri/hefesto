@@ -25,8 +25,8 @@ class UsersController extends AppController {
     public $components = array('Paginator');
 
     public function isAuthorized($user) {
-         if ($user['role'] == 'supervisor') {
-            if (in_array($this->action, array('viewOperarios','view'))) {
+        if ($user['role'] == 'supervisor') {
+            if (in_array($this->action, array('viewOperarios', 'view'))) {
                 return true;
             } else {
                 if ($this->Auth->user('id')) {
@@ -41,6 +41,8 @@ class UsersController extends AppController {
     public function login() {
         if ($this->request->is('post')) {
             if ($this->Auth->login()) {
+                //$notifications = ClassRegistry::init('User')->getUnreadNotification(AuthComponent::user('id'));
+                $this->set(compact('notifications'));
                 return $this->redirect($this->Auth->redirectUrl());
             }
             $this->Session->setFlash(__('Invalid username or password, try again'));
@@ -90,6 +92,7 @@ class UsersController extends AppController {
         $options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
         $this->set('user', $this->User->find('first', $options));
     }
+
     /**
      * viewOperarios method
      *
@@ -98,9 +101,10 @@ class UsersController extends AppController {
      * @return void
      */
     public function viewOperarios() {
-        $options = array('conditions' => array('User.role'  => 'operario'));
+        $options = array('conditions' => array('User.role' => 'operario'));
         $this->set('users', $this->User->find('all', $options));
     }
+
     /**
      * add method
      *

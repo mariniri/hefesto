@@ -57,4 +57,4 @@ $this->Paginator->options(array(
         <li> <?php echo $this->Paginator->next(__('Siguiente') . ' >', array('tag' => false), null, array('class' => 'next disabled')); ?> </li>
     </ul>
     <?php echo $this->Js->writeBuffer(); ?>
-</div> <!-- contenedor-users -
+</div> <!-- contenedor-informes -->

@@ -36,19 +36,24 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
     </head>
     <body>
         <?php if (isset($current_user)): ?>
+
             <?php echo $this->element('menu'); ?>
         <?php endif; ?>
 
         <div class="container" role="main">
+
             <?php echo $this->element('menu'); ?>
             <?php echo $this->Flash->render(); ?>
 
             <?php echo $this->fetch('content'); ?>
-            <footer class="footer">
-                <p>
-                    <?php echo "Marina del Espino Cortes Vargas - Universidad Pablo de Olavide"; ?>
-                </p>
-            </footer>
+            
         </div>
+        <footer class="footer">
+            <div class="container">
+                <p>
+                    <?php echo "Marina del Espino Cortes Vargas - Universidad Pablo de Olavide  -  2017"; ?>
+                </p>
+            </div>
+        </footer>
     </body>
 </html>

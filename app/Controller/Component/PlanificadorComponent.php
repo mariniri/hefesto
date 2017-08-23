@@ -125,7 +125,7 @@ class PlanificadorComponent extends Component {
     public function convertirJornadas($jornadas) {
         $listaJornadas = array();
         foreach ($jornadas as $t) {
-            array_push($listaJornadas, new JornadaAuxiliar($t['Jornada']['horaInicio'], $t['Jornada']['horafin'], $t['Jornada']['id']));
+            array_push($listaJornadas, new JornadaAuxiliar($t['Jornada']['horaInicio'], $t['Jornada']['horafin'], $t['Jornada']['id'], $t['Jornada']['user_id']));
         }
         return $listaJornadas;
     }

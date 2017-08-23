@@ -27,7 +27,7 @@ class JornadaAuxiliar {
     private $minutoslibres;
     private $id;
 
-    function __construct($inicio, $fin, $id) {
+    function __construct($inicio, $fin, $id,$op) {
         $this->inicio = strtotime($inicio);
         $this->fin = strtotime($fin);
         $this->total = ($this->fin - $this->inicio) / 60;
@@ -37,6 +37,7 @@ class JornadaAuxiliar {
         $this->fecha = explode(" ", $inicio)[0];
         $this->minutoslibres = $this->total;
         $this->id = $id;
+        $this->operario=$op;
     }
 
 //    function comprobarDisponibilidad($tarea) {

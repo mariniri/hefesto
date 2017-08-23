@@ -29,7 +29,7 @@ class TareasController extends AppController {
 
     public function isAuthorized($user) {
         if ($user['role'] == 'supervisor') {
-            if (in_array($this->action, array('add', 'index', 'planificar', 'edit', 'view', 'buscar', 'delete', 'tareasPendientes', 'tareasAsignadas', 'tareasAtendidas'))) {
+            if (in_array($this->action, array('add', 'index', 'planificar', 'edit', 'view', 'buscar', 'delete', 'tareasPendientes', 'tareasAsignadas', 'tareasDeclinadas', 'tareasAtendidas'))) {
                 return true;
             } else {
                 if ($this->Auth->user('id')) {
@@ -143,7 +143,7 @@ class TareasController extends AppController {
                     'conditions' => array('Tarea.jornada_id = d.id'),
                 )
             ),
-            'conditions' => array('Jornada.user_id' => $id,'Tarea.estado' => 'asignada'), 
+            'conditions' => array('Jornada.user_id' => $id, 'Tarea.estado' => 'asignada'),
             'order' => array('Tarea.horaInicio' => 'ASC'),
         ));
 
@@ -159,6 +159,11 @@ class TareasController extends AppController {
      */
     public function tareasPendientes() {
         $options = array('conditions' => array('Tarea.estado' => 'pendiente'));
+        $this->set('tareas', $this->Tarea->find('all', $options));
+    }
+
+    public function tareasDeclinadas() {
+        $options = array('conditions' => array('Tarea.estado' => 'declinada'));
         $this->set('tareas', $this->Tarea->find('all', $options));
     }
 
@@ -218,9 +223,11 @@ class TareasController extends AppController {
         $central = $this->Session->read('central');
         $this->loadModel("Jornada");
         $resultado = $this->Planificador->distribuirTareas($tareas, $jornadas, $central);
-        $jornadas = $resultado[0];
-        //debug($jornadas);
-        foreach ($jornadas as $j) {
+        $this->set(compact('central'));
+        $jor = $resultado[0];
+        $this->set(compact('jor'));
+       // debug($jornadas);
+        foreach ($jor as $j) {
             $idjornada = $j->getId();
             $minutoslibres = $j->getMinutosLibres();
             $options2 = array('conditions' => array('Jornada.id' => $idjornada));
@@ -228,7 +235,7 @@ class TareasController extends AppController {
             $datos2['Jornada']['minutoslibres'] = $minutoslibres;
             $this->Jornada->save($datos2);
             $tareas = $j->getTareas();
-            debug($tareas);
+
             foreach ($tareas as $t) {
                 $idtarea = $t->getId();
                 $options = array('conditions' => array('Tarea.id' => $idtarea));
@@ -243,6 +250,7 @@ class TareasController extends AppController {
                 $this->Tarea->save($datos);
             }
         }
+        $this->Session->write('jornadas');
     }
 
     /**

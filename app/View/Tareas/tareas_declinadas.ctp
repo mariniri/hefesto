@@ -7,7 +7,7 @@ $this->Paginator->options(array(
 ?>
 <div id="contenedor-tareas">
     <div class="page-header">
-        <h2><?php echo __('Tareas atendidas'); ?></h2>
+        <h2><?php echo __('Tareas declinadas'); ?></h2>
     </div>
     <div class ="col-md-12">
         <div class="progress oculto" id="procesando">

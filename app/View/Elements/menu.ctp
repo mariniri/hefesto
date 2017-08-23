@@ -73,6 +73,8 @@
                             <li><?php echo $this->Html->link('Tareas pendientes', array('controller' => 'tareas', 'action' => 'tareasPendientes')); ?></li>
                             <li><?php echo $this->Html->link('Tareas asignadas', array('controller' => 'tareas', 'action' => 'tareasAsignadas')); ?></li>
                             <li><?php echo $this->Html->link('Tareas atendidas', array('controller' => 'tareas', 'action' => 'tareasAtendidas')); ?></li>  
+                            <li><?php echo $this->Html->link('Tareas declinadas', array('controller' => 'tareas', 'action' => 'tareasDeclinadas')); ?></li>  
+
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -90,8 +92,27 @@
                         </ul>
                     </li>
                     <li>
-                    <?php echo $this->Html->link('Planificador', array('controller' => 'tareas', 'action' => 'buscar')); ?>
+                        <?php echo $this->Html->link('Planificador', array('controller' => 'tareas', 'action' => 'buscar')); ?>
                     </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Notificaciones <span class="caret"></span></a>
+                        <!--<?php // $notifications = ClassRegistry::init('User')->getUnreadNotification(AuthComponent::user('id')); ?>-->
+                        <?php if (!empty($notifications)): ?>
+                            <span class="badge badge-success">
+                                <?php echo count($notifications); ?>
+                            </span>
+                        <?php endif ?>
+                     
+                        <ul class="dropdown-menu">
+                            <?php foreach ($notifications as $notification): ?>
+                                <li><?php echo $this->Notification->display($notification); ?></li>
+                                <li class="divider"></li>
+                            <?php endforeach ?>
+                            <li class="text-center"><?= $this->Html->link(__('Display all'), '#'); ?></li>
+                        </ul>
+                    </li>
+
+
                 <?php } ?>
                 <?php if ($current_user['role'] == 'operario') { ?>
                     <li class="dropdown">
@@ -114,11 +135,12 @@
                         </ul>
                     </li>
                 <?php } ?>
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <?php echo $this->Html->link('Salir', array('controller' => 'users', 'action' => 'logout')); ?>
-                    </li>
-                </ul>  
+            </ul>
+            <ul class="nav navbar-nav navbar-left">
+                <li>
+                    <?php echo $this->Html->link('Salir', array('controller' => 'users', 'action' => 'logout')); ?>
+                </li>
+            </ul>  
         </div><!--/.nav-collapse -->
     </div>
 </div>

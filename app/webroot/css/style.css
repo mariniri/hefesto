@@ -30,3 +30,35 @@ body {
     height: 20px; 
     display: block;
 }
+
+.footer{
+    position: fixed;
+    bottom:0px;
+    width:100%;
+    margin:0;
+    padding: 0;
+    height:3%;
+    background-color: lightsteelblue;
+    font-size: small;
+    font-style: oblique;
+    color:black;
+}
+
+#container{
+    height:90%;
+}
+#contenedor-users{
+    height:90%;
+}
+#contenedor-tareas{
+    height:90%;
+}
+#contenedor-jornadas{
+    height:90%;
+}
+#contenedor-informes{
+    height:90%;
+}
+#contenedor-centrals{
+    height:90%;
+}
