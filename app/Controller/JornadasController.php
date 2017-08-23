@@ -26,7 +26,7 @@ class JornadasController extends AppController {
 
     public function isAuthorized($user) {
         if ($user['role'] == 'supervisor') {
-            if (in_array($this->action, array('add','edit', 'index', 'view', 'delete'))) {
+            if (in_array($this->action, array('add', 'edit', 'index', 'view', 'delete'))) {
                 return true;
             } else {
                 if ($this->Auth->user('id')) {
@@ -36,7 +36,7 @@ class JornadasController extends AppController {
             }
         }
         if ($user['role'] == 'operario') {
-            if (in_array($this->action, array('misJornadas','view'))) {
+            if (in_array($this->action, array('misJornadas', 'view'))) {
                 return true;
             } else {
                 if ($this->Auth->user('id')) {
@@ -61,8 +61,6 @@ class JornadasController extends AppController {
         $this->set('jornadas', $this->paginate());
     }
 
-    
-    
     /**
      * buscar method
      *
@@ -72,8 +70,8 @@ class JornadasController extends AppController {
         $search = null;
         if (!empty($this->request->query['search'])) {
             $search = $this->request->query['search'];
-            $fecha=$search['year'].'-'.$search['month'].'-'.$search['day'];
-            $conditions[] = array('Jornada.fecha LIKE' => $fecha );
+            $fecha = $search['year'] . '-' . $search['month'] . '-' . $search['day'];
+            $conditions[] = array('Jornada.fecha LIKE' => $fecha);
 
             $jornadas = $this->Tarea->find('all', array('recursive' => -1, 'conditions' => $conditions, 'limit' => 200));
 
@@ -89,7 +87,7 @@ class JornadasController extends AppController {
         }
         $this->redirect('/tareas/buscar');
     }
-    
+
     /**
      * view method
      *
@@ -126,15 +124,25 @@ class JornadasController extends AppController {
     public function add() {
         if ($this->request->is('post')) {
             $this->Jornada->create();
-            if ($this->Jornada->save($this->request->data)) {
-                $this->Flash->success(__('The jornada has been saved.'));
-                return $this->redirect(array('action' => 'index'));
-            } else {
-                $this->Flash->error(__('The jornada could not be saved. Please, try again.'));
-            }
+            $this->request->data;
+            $id = $this->request->data['Jornada']['user_id'];
+            $fecha = $this->request->data['Jornada']['fecha']['year'] . '-' . $this->request->data['Jornada']['fecha']['month'] . '-' . $this->request->data['Jornada']['fecha']['day'];
+            $options = array('conditions' => array('Jornada.user_id' => $id, 'Jornada.fecha' => $fecha));
+            $datos = $this->Jornada->find('first', $options);
+            if (empty($datos)) {
+                if ($this->Jornada->save($this->request->data)) {
+                    $this->Flash->success(__('The jornada has been saved.'));
+                    return $this->redirect(array('action' => 'index'));
+                } else {
+                    $this->Flash->error(__('The jornada could not be saved. Please, try again.'));
+                }
+            } $this->Flash->error(__('El operario ya tiene una jornada definida para ese día.'));
         }
-        $users = $this->Jornada->User->find('list');
-        $centrals = $this->Jornada->Central->find('list');
+
+        $options = array('conditions' => array('User.role' => 'operario'));
+        $users = $this->Jornada->User->find('list', $options);
+        $options2 = array('conditions' => array('NOT' => array('Central.dirección' => 'INICIAL')));
+        $centrals = $this->Jornada->Central->find('list', $options2);
         $this->set(compact('users', 'centrals'));
     }
 
@@ -150,18 +158,26 @@ class JornadasController extends AppController {
             throw new NotFoundException(__('Invalid jornada'));
         }
         if ($this->request->is(array('post', 'put'))) {
-            if ($this->Jornada->save($this->request->data)) {
-                $this->Flash->success(__('The jornada has been saved.'));
-                return $this->redirect(array('action' => 'index'));
-            } else {
-                $this->Flash->error(__('The jornada could not be saved. Please, try again.'));
-            }
+            $id = $this->request->data['Jornada']['user_id'];
+            $fecha = $this->request->data['Jornada']['fecha']['year'] . '-' . $this->request->data['Jornada']['fecha']['month'] . '-' . $this->request->data['Jornada']['fecha']['day'];
+            $options = array('conditions' => array('Jornada.user_id' => $id, 'Jornada.fecha' => $fecha));
+            $datos = $this->Jornada->find('first', $options);
+            if (empty($datos)) {
+                if ($this->Jornada->save($this->request->data)) {
+                    $this->Flash->success(__('The jornada has been saved.'));
+                    return $this->redirect(array('action' => 'index'));
+                } else {
+                    $this->Flash->error(__('The jornada could not be saved. Please, try again.'));
+                }
+            } $this->Flash->error(__('El operario ya tiene una jornada definida para ese día.'));
         } else {
             $options = array('conditions' => array('Jornada.' . $this->Jornada->primaryKey => $id));
             $this->request->data = $this->Jornada->find('first', $options);
         }
-        $users = $this->Jornada->User->find('list');
-        $centrals = $this->Jornada->Central->find('list');
+        $options = array('conditions' => array('User.role' => 'operario'));
+        $users = $this->Jornada->User->find('list', $options);
+        $options2 = array('conditions' => array('NOT' => array('Central.dirección' => 'INICIAL')));
+        $centrals = $this->Jornada->Central->find('list', $options2);
         $this->set(compact('users', 'centrals'));
     }
 

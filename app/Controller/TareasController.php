@@ -140,10 +140,11 @@ class TareasController extends AppController {
                     'alias' => 'd',
                     'type' => 'left',
                     'foreignKey' => false,
-                    'conditions' => array('Tarea.jornada_id = d.id',)
+                    'conditions' => array('Tarea.jornada_id = d.id'),
                 )
             ),
-            'conditions' => array('Jornada.user_id' => $id)
+            'conditions' => array('Jornada.user_id' => $id,'Tarea.estado' => 'asignada'), 
+            'order' => array('Tarea.horaInicio' => 'ASC'),
         ));
 
         $this->set('tareas', $query);

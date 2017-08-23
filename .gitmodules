@@ -1,0 +1,3 @@
+[submodule "app/Plugin/plugins/Notifications"]
+	path = app/Plugin/plugins/Notifications
+	url = git://github.com/beeman/cakephp-bootstrap-notifications.git
