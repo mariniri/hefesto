@@ -158,18 +158,27 @@ class JornadasController extends AppController {
             throw new NotFoundException(__('Invalid jornada'));
         }
         if ($this->request->is(array('post', 'put'))) {
-            $id = $this->request->data['Jornada']['user_id'];
-            $fecha = $this->request->data['Jornada']['fecha']['year'] . '-' . $this->request->data['Jornada']['fecha']['month'] . '-' . $this->request->data['Jornada']['fecha']['day'];
-            $options = array('conditions' => array('Jornada.user_id' => $id, 'Jornada.fecha' => $fecha));
-            $datos = $this->Jornada->find('first', $options);
-            if (empty($datos)) {
+            $id2 = $this->request->data['Jornada']['user_id'];
+            if ($id2 == $this->request->data['Jornada']['user_id']) {
+                $fecha = $this->request->data['Jornada']['fecha']['year'] . '-' . $this->request->data['Jornada']['fecha']['month'] . '-' . $this->request->data['Jornada']['fecha']['day'];
+                $options = array('conditions' => array('Jornada.user_id' => $id2, 'Jornada.fecha' => $fecha));
+                $datos = $this->Jornada->find('first', $options);
+                if (empty($datos)) {
+                    if ($this->Jornada->save($this->request->data)) {
+                        $this->Flash->success(__('The jornada has been saved.'));
+                        return $this->redirect(array('action' => 'index'));
+                    } else {
+                        $this->Flash->error(__('The jornada could not be saved. Please, try again.'));
+                    }
+                } $this->Flash->error(__('El operario ya tiene una jornada definida para ese día.'));
+            } else {
                 if ($this->Jornada->save($this->request->data)) {
                     $this->Flash->success(__('The jornada has been saved.'));
                     return $this->redirect(array('action' => 'index'));
                 } else {
                     $this->Flash->error(__('The jornada could not be saved. Please, try again.'));
                 }
-            } $this->Flash->error(__('El operario ya tiene una jornada definida para ese día.'));
+            }
         } else {
             $options = array('conditions' => array('Jornada.' . $this->Jornada->primaryKey => $id));
             $this->request->data = $this->Jornada->find('first', $options);

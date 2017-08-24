@@ -47,6 +47,11 @@ body {
 #container{
     height:90%;
 }
+#contenedor-mapa{
+    height:90%;
+    border-color: gray;
+    border-radius: 2%;
+}
 #contenedor-users{
     height:90%;
 }
