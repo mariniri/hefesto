@@ -94,24 +94,6 @@
                     <li>
                         <?php echo $this->Html->link('Planificador', array('controller' => 'tareas', 'action' => 'buscar')); ?>
                     </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Notificaciones <span class="caret"></span></a>
-                        <!--<?php // $notifications = ClassRegistry::init('User')->getUnreadNotification(AuthComponent::user('id')); ?>-->
-                        <?php if (!empty($notifications)): ?>
-                            <span class="badge badge-success">
-                                <?php echo count($notifications); ?>
-                            </span>
-                        <?php endif ?>
-                     
-                        <ul class="dropdown-menu">
-                            <?php foreach ($notifications as $notification): ?>
-                                <li><?php echo $this->Notification->display($notification); ?></li>
-                                <li class="divider"></li>
-                            <?php endforeach ?>
-                            <li class="text-center"><?= $this->Html->link(__('Display all'), '#'); ?></li>
-                        </ul>
-                    </li>
-
 
                 <?php } ?>
                 <?php if ($current_user['role'] == 'operario') { ?>
@@ -119,7 +101,6 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mis jornadas <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><?php echo $this->Html->link('Listar jornadas', array('controller' => 'jornadas', 'action' => 'misJornadas')); ?></li>
-
                         </ul>
                     </li>
                     <li class="dropdown">

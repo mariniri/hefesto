@@ -1,6 +1,6 @@
 <?php if ($ajax != 1): ?>
 
-    <h1>Buscar tareas</h1>
+    <h1>Buscar datos</h1>
     <br>
     <div class="row">
         <?php echo $this->Form->create('Tarea', array('type' => 'GET')); ?>

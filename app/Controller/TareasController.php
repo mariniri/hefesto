@@ -226,7 +226,7 @@ class TareasController extends AppController {
         $this->set(compact('central'));
         $jor = $resultado[0];
         $this->set(compact('jor'));
-       // debug($jornadas);
+        // debug($jornadas);
         foreach ($jor as $j) {
             $idjornada = $j->getId();
             $minutoslibres = $j->getMinutosLibres();
@@ -235,20 +235,18 @@ class TareasController extends AppController {
             $datos2['Jornada']['minutoslibres'] = $minutoslibres;
             $this->Jornada->save($datos2);
             $tareas = $j->getTareas();
-//
-//            foreach ($tareas as $t) {
-//                $idtarea = $t->getId();
-//                $options = array('conditions' => array('Tarea.id' => $idtarea));
-//                $datos = $this->Tarea->find('first', $options);
-//                $datos['Tarea']['estado'] = 'asignada';
-//                $datos['Tarea']['jornada_id'] = "$idjornada";
-//                $date = date_create($t->getHoraInicio());
-//                $datos['Tarea']['horaInicio'] = $date->format('Y-m-d H:i:s');
-//                $date = date_create($t->getHoraFin());
-//                $datos['Tarea']['horaFin'] = $date->format('Y-m-d H:i:s');
-//                debug($datos['Tarea']);
-//                $this->Tarea->save($datos);
-//            }
+            foreach ($tareas as $t) {
+                $idtarea = $t->getId();
+                $options = array('conditions' => array('Tarea.id' => $idtarea));
+                $datos = $this->Tarea->find('first', $options);
+                $datos['Tarea']['estado'] = 'asignada';
+                $datos['Tarea']['jornada_id'] = "$idjornada";
+                $date = date_create($t->getHoraInicio());
+                $datos['Tarea']['horaInicio'] = $date->format('Y-m-d H:i:s');
+                $date = date_create($t->getHoraFin());
+                $datos['Tarea']['horaFin'] = $date->format('Y-m-d H:i:s');
+                $this->Tarea->save($datos);
+            }
         }
         $this->Session->write('jornadas');
     }

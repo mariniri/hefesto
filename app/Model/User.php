@@ -16,11 +16,6 @@ class User extends AppModel {
      * @var string
      */
     public $displayField = 'apellidos';
-    public $actsAs = array(
-        'Notification.Notifiable' => array(
-            'subjects' => array('User', 'Post', 'Comment')
-        )
-    );
 
     /**
      * Validation rules

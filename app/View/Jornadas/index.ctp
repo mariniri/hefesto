@@ -23,6 +23,7 @@ $this->Paginator->options(array(
 			<th><?php echo $this->Paginator->sort('horaInicio'); ?></th>
 			<th><?php echo $this->Paginator->sort('horafin'); ?></th>
 			<th><?php echo $this->Paginator->sort('fecha'); ?></th>
+                        <th><?php echo $this->Paginator->sort('minutos libres'); ?></th>
 			<th><?php echo $this->Paginator->sort('user_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('central_id'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
@@ -35,6 +36,7 @@ $this->Paginator->options(array(
 		<td><?php echo h($jornada['Jornada']['horaInicio']); ?>&nbsp;</td>
 		<td><?php echo h($jornada['Jornada']['horafin']); ?>&nbsp;</td>
 		<td><?php echo h($jornada['Jornada']['fecha']); ?>&nbsp;</td>
+                <td><?php echo h($jornada['Jornada']['minutoslibres']); ?>&nbsp;</td>
 		<td>
 			<?php echo $this->Html->link($jornada['User']['apellidos'], array('controller' => 'users', 'action' => 'view', $jornada['User']['id'])); ?>
 		</td>

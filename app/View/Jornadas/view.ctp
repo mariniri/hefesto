@@ -24,6 +24,11 @@
             <?php echo h($jornada['Jornada']['fecha']); ?>
             &nbsp;
         </dd>
+        <dt><?php echo __('Minutos libres'); ?></dt>
+        <dd>
+            <?php echo h($jornada['Jornada']['minutoslibres']); ?>
+            &nbsp;
+        </dd>
         <dt><?php echo __('Usuario'); ?></dt>
         <dd>
             <?php echo $this->Html->link($jornada['User']['apellidos'], array('controller' => 'users', 'action' => 'view', $jornada['User']['id'])); ?>
