@@ -31,7 +31,7 @@
     <?php echo $this->Form->postLink(__('Eliminar central'), array('action' => 'delete', $central['Central']['id']), array('confirm' => __('Seguro que quieres eliminar a # %s?', $central['Central']['id']), 'class' => 'btn btn-xs btn-info')); ?> <br>
 
 <h4><?php echo __('Jornadas asignadas'); ?></h4>
-<?php if (!empty($user['Jornada'])): ?>
+<?php if (!empty($central['Jornada'])): ?>
     <table class="table table-bordered">
         <tr>
             <th><?php echo __('Id'); ?></th>
