@@ -25,10 +25,13 @@ body {
     display: none;
 }
 
-.navbar-brand{
-    max-width: 20%;
-    height: 20px; 
-    display: block;
+.navbar-brand {
+  padding: 0px;
+}
+.navbar-brand>img {
+  height: 40;
+  padding: 15px;
+  width: auto;
 }
 
 .footer{
