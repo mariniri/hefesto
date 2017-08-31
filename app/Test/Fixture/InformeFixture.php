@@ -38,6 +38,22 @@ class InformeFixture extends CakeTestFixture {
 			'created' => '2017-08-16 19:04:12',
 			'modified' => '2017-08-16 19:04:12',
 			'jornada_id' => 1
+		),array(
+			'id' => 2,
+			'nombre' => 'Lorem ipsum dolor sit amet',
+			'descripcion' => 'Lorem ipsum dolor sit amet',
+			'datos' => 'Lorem ipsum dolor sit amet',
+			'created' => '2017-08-16 19:04:12',
+			'modified' => '2017-08-16 19:04:12',
+			'jornada_id' => 2
+		),array(
+			'id' => 3,
+			'nombre' => 'Lorem ipsum dolor sit amet',
+			'descripcion' => 'Lorem ipsum dolor sit amet',
+			'datos' => 'Lorem ipsum dolor sit amet',
+			'created' => '2017-08-16 19:04:12',
+			'modified' => '2017-08-16 19:04:12',
+			'jornada_id' => 3
 		),
 	);
 

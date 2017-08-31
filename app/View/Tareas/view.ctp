@@ -57,7 +57,7 @@
 </div>
 <?php if ($tarea['Tarea']['estado'] == 'asignada' && $current_user['role'] == 'operario') { ?>
     <?php echo $this->Html->link(__('No puedo asistir'), array('action' => 'declinar', $tarea['Tarea']['id']), array('class' => 'btn btn-s btn-warning')); ?><br>
-    <br><?php echo $this->Html->link(__('Finalizada'), array('action' => 'finalizar', $tarea['Tarea']['id']), array('class' => 'btn btn-s btn-success')); ?>
+    <br><?php echo $this->Html->link(__('Realizada'), array('action' => 'finalizar', $tarea['Tarea']['id']), array('class' => 'btn btn-s btn-success')); ?>
 <?php } ?>
 <?php if ($current_user['role'] != 'operario') { ?>
     <?php echo $this->Html->link(__('Editar tarea'), array('action' => 'edit', $tarea['Tarea']['id']), array('class' => 'btn btn-xs btn-info')); ?><br>

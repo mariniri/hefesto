@@ -55,7 +55,7 @@ class PlanificadorComponent extends Component {
         return $dist;
     }
 
-    function distribuirTareas($tareasaux, $jornadasaux, $centralaux) {
+   function distribuirTareas($tareasaux, $jornadasaux, $centralaux) {
         $tareas = $this->convertirTareas($tareasaux);
         $jornadas = $this->convertirJornadas($jornadasaux);
         $central = $this->convertirCentral($centralaux);
@@ -101,13 +101,14 @@ class PlanificadorComponent extends Component {
                 $auxtarea++;
             }
 
+            
+
+
+            $numtareas = count($totaltareas);
             if ($auxtarea == $numtareas) {
                 $auxjornada++;
                 $auxtarea = 0;
             }
-
-
-            $numtareas = count($totaltareas);
         }
 
         //devuelve las que no se han podido asignar

@@ -30,8 +30,24 @@ class CentralFixture extends CakeTestFixture {
 	public $records = array(
 		array(
 			'id' => 1,
-			'latitud' => 'Lorem ipsum dolor sit amet',
-			'longitud' => 'Lorem ipsum dolor sit amet',
+			'latitud' => '37.355241',
+			'longitud' => '-5.988678',
+			'dirección' => 'Lorem ipsum dolor sit amet',
+			'created' => '2017-08-16 18:46:43',
+			'modified' => '2017-08-16 18:46:43'
+		),
+            array(
+			'id' => 2,
+			'latitud' => '37.355241',
+			'longitud' => '-5.988678',
+			'dirección' => 'Lorem ipsum dolor sit amet',
+			'created' => '2017-08-16 18:46:43',
+			'modified' => '2017-08-16 18:46:43'
+		),
+            array(
+			'id' => 3,
+			'latitud' => '37.355241',
+			'longitud' => '-5.988678',
 			'dirección' => 'Lorem ipsum dolor sit amet',
 			'created' => '2017-08-16 18:46:43',
 			'modified' => '2017-08-16 18:46:43'

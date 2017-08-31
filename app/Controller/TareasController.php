@@ -226,7 +226,6 @@ class TareasController extends AppController {
         $this->set(compact('central'));
         $jor = $resultado[0];
         $this->set(compact('jor'));
-        // debug($jornadas);
         foreach ($jor as $j) {
             $idjornada = $j->getId();
             $minutoslibres = $j->getMinutosLibres();
@@ -292,15 +291,16 @@ class TareasController extends AppController {
         $dist = $this->Planificador->distanciaEntreDosById($lat1, $lat2, $long1, $long2);
         $dur = $tarea['Tarea']['total'];
         $total = $dist + $dur;
-        debug($total);
         if ($total <= $jornada['Jornada']['minutoslibres']) {
             $min = $jornada['Jornada']['minutoslibres'] - $total;
             $this->Jornada->save($jornada);
             $tarea['Tarea']['estado'] = 'asignada';
             $horaini = $this->Planificador->sumarHora($lasttarea[0]['Tarea']['horaFin'], $dist);
             $horafin = $this->Planificador->sumarHora($horaini, $dur);
-            $tarea['Tarea']['horaInicio'] = $horaini;
-            $tarea['Tarea']['horaFin'] = $horafin;
+            $horainicio= strtotime($horaini);
+            $horafinal= strtotime($horafin);
+            $tarea['Tarea']['horaInicio'] = date('Y-m-d H:i:s',$horainicio);
+            $tarea['Tarea']['horaFin'] = date('Y-m-d H:i:s',$horafinal);
         } else {
             $tarea['Tarea']['estado'] = 'declinada';
             $tarea['Tarea']['jornada_id'] = '4';

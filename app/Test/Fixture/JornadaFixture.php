@@ -50,6 +50,33 @@ class JornadaFixture extends CakeTestFixture {
 			'user_id' => 1,
 			'central_id' => 1
 		),
+            array(
+			'id' => 2,
+			'inicio' => 1502902268,
+			'fin' => 1502902268,
+			'horaInicio' => '2017-08-16 18:51:08',
+			'horafin' => '2017-08-16 18:51:08',
+			'total' => 1,
+			'fecha' => '2017-08-16',
+			'minutoslibres' => 1,
+			'created' => '2017-08-16 18:51:08',
+			'modified' => '2017-08-16 18:51:08',
+			'user_id' => 2,
+			'central_id' => 2
+		),array(
+			'id' => 3,
+			'inicio' => 1502902268,
+			'fin' => 1502902268,
+			'horaInicio' => '2017-08-16 18:51:08',
+			'horafin' => '2017-08-16 18:51:08',
+			'total' => 1,
+			'fecha' => '2017-08-16',
+			'minutoslibres' => 1,
+			'created' => '2017-08-16 18:51:08',
+			'modified' => '2017-08-16 18:51:08',
+			'user_id' => 3,
+			'central_id' => 3
+		),
 	);
 
 }

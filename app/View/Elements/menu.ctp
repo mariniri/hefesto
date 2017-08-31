@@ -11,7 +11,7 @@
                 <?php
                 echo $this->Html->image("logo.png", array(
                     "alt" => "Hefesto",
-                    'url' => array('controller' => 'welcome', 'action' => 'index'),"class"=> "navbar-brand"));
+                    'url' => array('controller' => 'welcome', 'action' => 'index'),"class"=> "navbar-img"));
                 ?>
             
         </div>

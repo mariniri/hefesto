@@ -25,15 +25,30 @@ body {
     display: none;
 }
 
-.navbar-brand {
-  padding: 0px;
+.nav navbar-nav{
+    padding:2px;
 }
-.navbar-brand>img {
-  height: 40;
-  padding: 15px;
-  width: auto;
+.navbar-img {
+    margin-top:3px;
+    height: 50px;
+    width: auto;
 }
+.logo{
+    height: 50px;
+    width: auto;
+    float:left; 
+}
+.logoupo{
+    height: 50px;
+    width: auto;
+    float:right;
 
+}
+.informacion{
+    font-style: italic;
+    font-size: large;
+    
+}
 .footer{
     position: fixed;
     bottom:0px;

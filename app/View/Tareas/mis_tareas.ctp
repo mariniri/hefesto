@@ -43,7 +43,7 @@
                                 <?php echo $this->Html->link(__('Ver'), array('action' => 'view', $tarea['Tarea']['id']), array('class' => 'btn btn-xs btn-info')); ?><br>
                                 <?php if ($tarea['Tarea']['estado'] == 'asignada') { ?>
                                     <br><?php echo $this->Html->link(__('No puedo asistir'), array('action' => 'declinar', $tarea['Tarea']['id']), array('class' => 'btn btn-xs btn-warning')); ?><br>
-                                    <br><?php echo $this->Html->link(__('Finalizada'), array('action' => 'finalizar', $tarea['Tarea']['id']), array('class' => 'btn btn-xs btn-success')); ?><br>
+                                    <br><?php echo $this->Html->link(__('Realizada'), array('action' => 'finalizar', $tarea['Tarea']['id']), array('class' => 'btn btn-xs btn-success')); ?><br>
                                 <?php } ?>
                             </td>
                         </tr>
